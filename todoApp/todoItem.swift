@@ -10,6 +10,7 @@ import Foundation
 
 struct todoItem{
     var itemTitle : String?
+    var workNotDone = true
     init(_ title: String){
         self.itemTitle = title
     }

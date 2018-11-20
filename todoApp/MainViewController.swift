@@ -8,7 +8,9 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
+
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +35,24 @@ class MainViewController: UIViewController {
         }
         todoItemName.text = nil
         print(ItemList)
+        todoTableView.reloadData()
     }
+    //Table View 관련 정의
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return ItemList.count
+    }
+    
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = todoTableView.dequeueReusableCell(withIdentifier: "todoCell", for: indexPath)
+        cell.textLabel?.text = ItemList[indexPath.row].itemTitle
+        return cell
+    }
+    
+    
+    
+    @IBOutlet weak var todoTableView: UITableView!
 }
 
