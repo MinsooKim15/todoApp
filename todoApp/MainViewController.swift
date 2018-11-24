@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class MainViewController: UIViewController,UITableViewDelegate, UITableViewDataSource, OptionButtonsDelegate  {
 
@@ -16,13 +17,30 @@ class MainViewController: UIViewController,UITableViewDelegate, UITableViewDataS
         super.viewDidLoad()
     }
 
-    var ItemList = [todoItem]()
+    var ItemList = [todoItem](){
+        didSet{
+            todoTableView.reloadData()
+        }
+    }
     
     @IBOutlet weak var nameOfUser: UILabel!
     
-    @IBOutlet weak var todoItemName: UITextField!
+    @IBOutlet weak var todoItemName: UITextField!{
+        didSet{
+            loadDataBase()
+        }
+    }
+    func loadDataBase(){
+        // this is implemented in the subclass
+        print("loadDataBase")
+    }
     
     @IBAction func saveItem(_ sender: UIButton) {
+        saveTodoItems(sender)
+        refreshDataBase(with: ItemList)
+    }
+    
+    func saveTodoItems(_ sender:UIButton){
         if let text = todoItemName.text {
             let TodoItem = todoItem(text)
             ItemList.append(TodoItem)
@@ -35,7 +53,9 @@ class MainViewController: UIViewController,UITableViewDelegate, UITableViewDataS
         print(ItemList)
         todoTableView.reloadData()
     }
-    
+    func refreshDataBase(with itemList: [todoItem]){
+        print("refreshDataBase super-loaded")
+    }
     
     //Table View 관련 정의
     
@@ -73,10 +93,7 @@ class MainViewController: UIViewController,UITableViewDelegate, UITableViewDataS
         ItemList[index.row].workNotDone = !ItemList[index.row].workNotDone
         todoTableView.reloadData()
     }
-    
-    //coreData 추가를 위한 코드
-    let context = AppDelegate.viewContext
-    
+   
     
     @IBOutlet weak var todoTableView: UITableView!
 }
